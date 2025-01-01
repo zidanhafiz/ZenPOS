@@ -1,18 +1,16 @@
+import { LogIn } from "lucide-react";
+import Header from "../Header";
+import { LoginForm } from "./Form";
+
 export default function LoginPage() {
   return (
-    <div>
-      <h1>Login</h1>
-      <form>
-        <input
-          type='email'
-          placeholder='Email'
-        />
-        <input
-          type='password'
-          placeholder='Password'
-        />
-        <button type='submit'>Login</button>
-      </form>
+    <div className='max-w-sm w-full'>
+      <Header
+        title='Welcome back'
+        description='Login to your account'
+        icon={<LogIn size={32} />}
+      />
+      <LoginForm />
     </div>
   );
 }
