@@ -25,3 +25,24 @@ export const signupSchema = z
   });
 
 export type SignupSchema = z.infer<typeof signupSchema>;
+
+export const forgotPasswordSchema = z.object({
+  confirmEmail: z.string().email().min(3, { message: "Email must be at least 3 characters" }).max(30, { message: "Email must be less than 30 characters" }),
+});
+
+export type ForgotPasswordSchema = z.infer<typeof forgotPasswordSchema>;
+
+export const resetPasswordSchema = z
+  .object({
+    password: z.string().min(6, { message: "Password must be at least 6 characters" }).max(20, { message: "Password must be less than 20 characters" }),
+    confirmPassword: z
+      .string()
+      .min(6, { message: "Confirm password must be at least 6 characters" })
+      .max(20, { message: "Confirm password must be less than 20 characters" }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
+
+export type ResetPasswordSchema = z.infer<typeof resetPasswordSchema>;
