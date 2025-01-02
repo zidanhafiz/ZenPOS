@@ -116,7 +116,7 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
                 href='/signup'
                 className='text-primary underline font-medium'
               >
-                Signup
+                Sign up
               </Link>
             </p>
           </div>

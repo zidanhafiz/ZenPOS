@@ -15,6 +15,7 @@ export const authConfig = {
   pages: {
     signIn: "/login",
   },
+  trustHost: !!process.env.AUTH_TRUST_HOST,
   callbacks: {
     async authorized({ auth, request: { nextUrl } }) {
       const user = auth?.user;
