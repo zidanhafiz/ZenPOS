@@ -10,6 +10,8 @@ import { signupSchema, SignupSchema } from "@/lib/schemas/auth";
 import Link from "next/link";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useState } from "react";
+import { signup } from "@/actions/auth";
+import { useRouter } from "next/navigation";
 
 export function SignupForm({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -24,21 +26,28 @@ export function SignupForm({ className, ...props }: React.ComponentPropsWithoutR
       confirmPassword: "",
     },
   });
-
+  const router = useRouter();
   const {
     handleSubmit,
     formState: { isSubmitting },
   } = form;
 
   const onSubmit = async (data: SignupSchema) => {
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className='mt-2 w-[340px] rounded-md bg-slate-950 p-4'>
-          <code className='text-white'>{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
+    if (isSubmitting) return;
+
+    const response = await signup(data);
+
+    if (!response.success) {
+      toast({
+        title: "Something went wrong",
+        description: response.message,
+        variant: "destructive",
+      });
+      return;
+    }
+
+    router.push(response.data?.finishUrl || "/");
+    return;
   };
 
   return (

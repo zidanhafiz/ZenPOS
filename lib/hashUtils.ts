@@ -1,9 +1,12 @@
-import { compareSync, hashSync } from "bcrypt";
+"use server";
+import { compare, hash } from "bcrypt";
 
-export const hashPassword = (password: string) => {
-  return hashSync(password, 10);
+export const hashPassword = async (password: string) => {
+  const hashedPassword = await hash(password, 10);
+  return hashedPassword;
 };
 
-export const verifyPassword = (password: string, hashedPassword: string) => {
-  return compareSync(password, hashedPassword);
+export const verifyPassword = async (password: string, hashedPassword: string) => {
+  const isMatch = await compare(password, hashedPassword);
+  return isMatch;
 };

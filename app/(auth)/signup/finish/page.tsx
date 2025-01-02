@@ -1,41 +1,24 @@
-"use client";
-import { Button } from "@/components/ui/button";
-import { Info } from "lucide-react";
-import { useEffect, useState } from "react";
+import { verifyJWT } from "@/lib/jwt";
+import Content from "./Content";
+import { redirect } from "next/navigation";
 
-export default function FinishPage() {
-  const [count, setCount] = useState<number>(15);
+type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCount((prev) => prev - 1);
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
+export default async function FinishPage(props: { searchParams: SearchParams }) {
+  const searchParams = await props.searchParams;
+  const token = searchParams.t as string;
 
-  return (
-    <div className='text-center h-screen mt-12'>
-      <Info
-        size={40}
-        className='mx-auto'
-      />
-      <h4 className='text-3xl font-bold'>You&apos;re all set!</h4>
-      <p className='text-muted-foreground mt-2'>
-        We&apos;ve sent you an email to verify your account. Please check your email and click the link to verify your account.
-      </p>
-      <div className='flex items-center justify-center gap-2 mt-5'>
-        <p className='text-sm text-muted-foreground'>Didn&apos;t receive the email? </p>
-        {count > 0 ? (
-          <p className='text-sm text-primary underline'>{count} seconds</p>
-        ) : (
-          <Button
-            className='text-primary underline p-0'
-            variant='link'
-          >
-            Resend email
-          </Button>
-        )}
-      </div>
-    </div>
-  );
+  if (!token) {
+    return redirect("/");
+  }
+
+  const decodedToken = Buffer.from(token, "base64").toString("utf-8");
+
+  const jwtPayload = await verifyJWT(decodedToken);
+
+  if (!jwtPayload) {
+    return redirect("/");
+  }
+
+  return <Content />;
 }
