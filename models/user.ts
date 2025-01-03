@@ -2,6 +2,16 @@ import { prisma } from "@/lib/prisma";
 import { User } from "@prisma/client";
 
 const userModels = {
+  async getUserById(id: string) {
+    try {
+      const user = await prisma.user.findUnique({ where: { id } });
+      return user;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  },
+
   async getUserByEmail(email: string) {
     try {
       const user = await prisma.user.findUnique({
@@ -28,6 +38,16 @@ const userModels = {
           isVerified: false,
         },
       });
+      return user;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  },
+
+  async updateUser(id: string, data: Partial<User>) {
+    try {
+      const user = await prisma.user.update({ where: { id }, data });
       return user;
     } catch (error) {
       console.error(error);

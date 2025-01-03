@@ -1,7 +1,7 @@
 "use server";
 import { sendEmail } from "@/lib/emailUtils";
 import { hashPassword } from "@/lib/hashUtils";
-import { signJWT } from "@/lib/jwt";
+import { JWTPayload, signJWT, verifyJWT } from "@/lib/jwt";
 import { signupSchema, SignupSchema } from "@/lib/schemas/auth";
 import userModels from "@/models/user";
 import { ServerActionResponse } from "@/types/server";
@@ -47,7 +47,7 @@ export const signup = async (data: SignupSchema): Promise<ServerActionResponse<{
 
     // Get the base url
     const verifyUrl = `${process.env.BASE_URL}/api/auth/verify?t=${verifyTokenBase64}`;
-    const finishUrl = `${process.env.BASE_URL}/signup/finish?t=${finishTokenBase64}`;
+    const finishUrl = `${process.env.BASE_URL}/signup/verify?t=${finishTokenBase64}`;
 
     await sendEmail(
       email,
@@ -62,6 +62,115 @@ export const signup = async (data: SignupSchema): Promise<ServerActionResponse<{
       success: true,
       message: "Success created user.",
       data: { finishUrl },
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message: "Something went wrong.",
+    };
+  }
+};
+
+export const verifyToken = async (token: string): Promise<ServerActionResponse<JWTPayload>> => {
+  if (!token) {
+    console.error("Token is required, redirecting to home page.");
+    return {
+      success: false,
+      message: "Token is required.",
+    };
+  }
+
+  try {
+    const decodedToken = Buffer.from(token, "base64").toString("utf-8");
+    const jwtPayload = await verifyJWT(decodedToken);
+
+    if (!jwtPayload) {
+      console.error("Invalid token, redirecting to home page.");
+      return {
+        success: false,
+        message: "Invalid token.",
+      };
+    }
+
+    const user = await userModels.getUserById(jwtPayload.id);
+
+    if (!user) {
+      console.error(`User ${jwtPayload.id} not found, redirecting to home page.`);
+      return {
+        success: false,
+        message: "User not found.",
+      };
+    }
+
+    if (user.isVerified) {
+      console.log(`User ${jwtPayload.id} already verified, redirecting to home page.`);
+      return {
+        success: false,
+        message: "User already verified.",
+      };
+    }
+
+    return {
+      success: true,
+      message: "Success verified token.",
+      data: jwtPayload,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message: "Something went wrong.",
+    };
+  }
+};
+
+export const createVerifyToken = async (userId: string) => {
+  try {
+    const token = await signJWT({ id: userId }, "10 mins");
+    const tokenBase64 = Buffer.from(token).toString("base64");
+    return tokenBase64;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+export const resendVerifyEmail = async (userId: string) => {
+  try {
+    const user = await userModels.getUserById(userId);
+
+    if (!user) {
+      console.error(`User ${userId} not found.`);
+      return {
+        success: false,
+        message: "User not found.",
+      };
+    }
+
+    const token = await createVerifyToken(userId);
+
+    if (!token) {
+      console.error(`Failed to create verify token for user ${userId}.`);
+      return {
+        success: false,
+        message: "Failed to create verify token.",
+      };
+    }
+
+    const verifyUrl = `${process.env.BASE_URL}/api/auth/verify?t=${token}`;
+    await sendEmail(
+      user.email,
+      "Verify your email",
+      `
+      <p>You are almost done!</p>
+      <p>Please verify your email by clicking on the link below: <a href="${verifyUrl}" target="_blank">Verify</a></p>
+      `
+    );
+
+    return {
+      success: true,
+      message: "Success resended email.",
     };
   } catch (error) {
     console.error(error);
