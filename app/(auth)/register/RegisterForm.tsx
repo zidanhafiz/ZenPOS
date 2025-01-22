@@ -154,7 +154,9 @@ export function RegisterForm({
                       checked={showPassword}
                       onCheckedChange={() => setShowPassword(!showPassword)}
                     />
-                    <label htmlFor="show-password">Show password</label>
+                    <label htmlFor="show-password" className="text-sm">
+                      Show password
+                    </label>
                   </div>
                   <Button type="submit" className="w-full">
                     Create Account

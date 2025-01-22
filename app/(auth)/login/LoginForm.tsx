@@ -21,11 +21,14 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { useState } from "react";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const form = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -73,19 +76,11 @@ export function LoginForm({
                     name="password"
                     render={({ field }) => (
                       <FormItem className="grid gap-2">
-                        <div className="flex items-center justify-between">
-                          <FormLabel>Password</FormLabel>
-                          <Link
-                            href="/forgot-password"
-                            className="ml-auto text-sm underline-offset-4 hover:underline"
-                          >
-                            Forgot your password?
-                          </Link>
-                        </div>
+                        <FormLabel>Password</FormLabel>
                         <FormControl>
                           <Input
                             placeholder="********"
-                            type="password"
+                            type={showPassword ? "text" : "password"}
                             required
                             {...field}
                           />
@@ -94,6 +89,24 @@ export function LoginForm({
                       </FormItem>
                     )}
                   />
+                  <div className="flex justify-between w-full">
+                    <Link
+                      href="/forgot-password"
+                      className="text-sm underline-offset-4 hover:underline"
+                    >
+                      Forgot your password?
+                    </Link>
+                    <div className="flex items-center gap-2 justify-end">
+                      <Checkbox
+                        id="show-password"
+                        checked={showPassword}
+                        onCheckedChange={() => setShowPassword(!showPassword)}
+                      />
+                      <label htmlFor="show-password" className="text-sm">
+                        Show password
+                      </label>
+                    </div>
+                  </div>
                   <Button type="submit" className="w-full">
                     Login
                   </Button>
