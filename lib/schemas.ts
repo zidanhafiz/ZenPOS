@@ -72,7 +72,23 @@ export const registerSchema = z
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
-    path: ["confirmPassword"]
-  })
+    path: ["confirmPassword"],
+  });
 
 export type RegisterSchema = z.infer<typeof registerSchema>;
+
+export const forgotPasswordSchema = z.object({
+  email: z
+    .string()
+    .min(3, {
+      message: "Email minimum length is 3 characters",
+    })
+    .email({
+      message: "Invalid email address",
+    })
+    .max(30, {
+      message: "Email maximum length is 30 characters",
+    }),
+});
+
+export type ForgotPasswordSchema = z.infer<typeof forgotPasswordSchema>;
