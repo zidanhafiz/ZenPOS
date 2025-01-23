@@ -101,7 +101,7 @@ export const resendVerificationEmail = async (email: string) => {
     });
 
     if (error) {
-      throw error.message;
+      throw Error(error.message);
     }
 
     return "Verification email sent successfully";
