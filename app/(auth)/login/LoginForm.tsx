@@ -23,6 +23,8 @@ import {
 } from "@/components/ui/form";
 import { useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
+import { login } from "@/actions/auth";
+import { useRouter } from "next/navigation";
 
 export function LoginForm({
   className,
@@ -36,9 +38,32 @@ export function LoginForm({
       password: "",
     },
   });
+  const {
+    formState: { isSubmitting, errors },
+  } = form;
+  const router = useRouter();
 
   const onSubmit = async (data: LoginSchema) => {
-    console.log(data);
+    try {
+      const formData = new FormData();
+
+      formData.append("email", data.email);
+      formData.append("password", data.password);
+
+      const res = await login(formData);
+
+      if (!res.success) {
+        throw Error(res.data);
+      }
+
+      router.push("/");
+    } catch (error) {
+      console.error(error);
+      form.setError("root", {
+        message:
+          (error as { message?: string })?.message ?? "Something went wrong",
+      });
+    }
   };
 
   return (
@@ -64,6 +89,7 @@ export function LoginForm({
                             placeholder="m@email.com"
                             type="email"
                             required
+                            disabled={isSubmitting}
                             {...field}
                           />
                         </FormControl>
@@ -82,6 +108,7 @@ export function LoginForm({
                             placeholder="********"
                             type={showPassword ? "text" : "password"}
                             required
+                            disabled={isSubmitting}
                             {...field}
                           />
                         </FormControl>
@@ -107,9 +134,18 @@ export function LoginForm({
                       </label>
                     </div>
                   </div>
-                  <Button type="submit" className="w-full">
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    disabled={isSubmitting}
+                  >
                     Login
                   </Button>
+                  {errors.root && (
+                    <FormMessage className="text-center">
+                      {errors.root.message}
+                    </FormMessage>
+                  )}
                 </div>
                 <div className="text-center text-sm">
                   Don&apos;t have an account?{" "}

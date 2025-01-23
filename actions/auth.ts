@@ -14,10 +14,10 @@ export const signup = async (formData: FormData): Promise<ActionResponse> => {
       success,
       error: schemaError,
       data,
-    } = await registerSchema.safeParseAsync(formData);
+    } = await registerSchema.safeParseAsync(Object.fromEntries(formData));
 
     if (!success) {
-      throw schemaError.message;
+      throw Error(schemaError.message);
     }
 
     const supabase = await createClient();
@@ -36,7 +36,7 @@ export const signup = async (formData: FormData): Promise<ActionResponse> => {
     );
 
     if (signupError) {
-      throw signupError.message;
+      throw signupError;
     }
 
     revalidatePath("/", "layout");
@@ -49,7 +49,7 @@ export const signup = async (formData: FormData): Promise<ActionResponse> => {
     console.error(error);
     return {
       success: false,
-      data: error,
+      data: (error as Error).message,
     };
   }
 };
@@ -60,10 +60,10 @@ export const login = async (formData: FormData): Promise<ActionResponse> => {
       success,
       error: schemaError,
       data,
-    } = await loginSchema.safeParseAsync(formData);
+    } = await loginSchema.safeParseAsync(Object.fromEntries(formData));
 
     if (!success) {
-      throw schemaError.message;
+      throw Error(schemaError.message);
     }
 
     const supabase = await createClient();
@@ -74,7 +74,7 @@ export const login = async (formData: FormData): Promise<ActionResponse> => {
     });
 
     if (loginError) {
-      throw loginError.message;
+      throw loginError;
     }
 
     revalidatePath("/", "layout");
@@ -87,7 +87,26 @@ export const login = async (formData: FormData): Promise<ActionResponse> => {
     console.error(error);
     return {
       success: false,
-      data: error,
+      data: (error as Error).message,
     };
+  }
+};
+
+export const resendVerificationEmail = async (email: string) => {
+  try {
+    const supabase = await createClient();
+    const { error } = await supabase.auth.resend({
+      type: "signup",
+      email,
+    });
+
+    if (error) {
+      throw error.message;
+    }
+
+    return "Verification email sent successfully";
+  } catch (error) {
+    console.error(error);
+    return (error as Error).message;
   }
 };

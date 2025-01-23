@@ -23,6 +23,8 @@ import {
 } from "@/components/ui/form";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useState } from "react";
+import { signup } from "@/actions/auth";
+import { useRouter } from "next/navigation";
 
 export function RegisterForm({
   className,
@@ -39,9 +41,36 @@ export function RegisterForm({
       confirmPassword: "",
     },
   });
+  const {
+    formState: { isSubmitting, errors },
+    setError,
+  } = form;
+  const router = useRouter();
 
   const onSubmit = async (data: RegisterSchema) => {
-    console.log(data);
+    try {
+      const formData = new FormData();
+
+      formData.append("firstName", data.firstName);
+      formData.append("lastName", data.lastName);
+      formData.append("email", data.email);
+      formData.append("password", data.password);
+      formData.append("confirmPassword", data.confirmPassword);
+
+      const res = await signup(formData);
+
+      if (!res.success) {
+        throw Error(res.data);
+      }
+
+      router.push(`/register/verify?userId=${res.data}`);
+    } catch (error) {
+      console.error(error);
+      setError("root", {
+        message:
+          (error as { message?: string })?.message || "Something went wrong",
+      });
+    }
   };
 
   return (
@@ -68,6 +97,7 @@ export function RegisterForm({
                               placeholder="John"
                               type="text"
                               required
+                              disabled={isSubmitting}
                               {...field}
                             />
                           </FormControl>
@@ -86,6 +116,7 @@ export function RegisterForm({
                               placeholder="Doe"
                               type="text"
                               required
+                              disabled={isSubmitting}
                               {...field}
                             />
                           </FormControl>
@@ -105,6 +136,7 @@ export function RegisterForm({
                             placeholder="m@email.com"
                             type="email"
                             required
+                            disabled={isSubmitting}
                             {...field}
                           />
                         </FormControl>
@@ -123,6 +155,7 @@ export function RegisterForm({
                             placeholder="********"
                             type={showPassword ? "text" : "password"}
                             required
+                            disabled={isSubmitting}
                             {...field}
                           />
                         </FormControl>
@@ -141,6 +174,7 @@ export function RegisterForm({
                             placeholder="********"
                             type={showPassword ? "text" : "password"}
                             required
+                            disabled={isSubmitting}
                             {...field}
                           />
                         </FormControl>
@@ -158,9 +192,18 @@ export function RegisterForm({
                       Show password
                     </label>
                   </div>
-                  <Button type="submit" className="w-full">
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    disabled={isSubmitting}
+                  >
                     Create Account
                   </Button>
+                  {errors.root && (
+                    <FormMessage className="text-center">
+                      {errors.root.message}
+                    </FormMessage>
+                  )}
                 </div>
                 <div className="text-center text-sm">
                   Already have an account?{" "}

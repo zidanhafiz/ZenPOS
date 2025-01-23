@@ -39,7 +39,7 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const authPaths = ["/login", "/register", "/forgot-password"];
+  const authPaths = ["/login", "/register", "/forgot-password", "/api/auth"];
 
   const isPathStartWithAuthPaths = authPaths.some((path) =>
     request.nextUrl.pathname.startsWith(path)
@@ -48,6 +48,12 @@ export async function updateSession(request: NextRequest) {
   if (!user && !isPathStartWithAuthPaths) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
+    return NextResponse.redirect(url);
+  }
+
+  if (user && isPathStartWithAuthPaths) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/";
     return NextResponse.redirect(url);
   }
 

@@ -58,7 +58,7 @@ export default async function VerifyPage({
         </CardHeader>
         <CardContent className="flex justify-center items-center gap-3">
           <p className="text-sm text-slate-500">Didn&apos;t get email?</p>
-          <ResendForm />
+          <ResendForm email={user.email} />
         </CardContent>
       </Card>
     </div>
