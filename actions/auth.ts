@@ -110,3 +110,67 @@ export const resendVerificationEmail = async (email: string) => {
     return (error as Error).message;
   }
 };
+
+export const logout = async (): Promise<ActionResponse> => {
+  try {
+    const supabase = await createClient();
+
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+      throw Error(error.message);
+    }
+
+    revalidatePath("/", "layout");
+
+    return {
+      success: true,
+      data: "User logged out successfully",
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      data: (error as Error).message,
+    };
+  }
+};
+
+export const getUserData = async (): Promise<ActionResponse> => {
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+      error,
+    } = await supabase.auth.getUser();
+
+    if (error) {
+      throw error;
+    }
+
+    if (!user) {
+      throw Error("User not found");
+    }
+
+    const { data: userData, error: userError } = await supabase
+      .from("users")
+      .select("*")
+      .eq("id", user.id)
+      .single();
+
+    if (userError) {
+      throw userError;
+    }
+
+    return {
+      success: true,
+      data: userData,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      data: (error as Error).message ?? "Something went wrong",
+    };
+  }
+};
