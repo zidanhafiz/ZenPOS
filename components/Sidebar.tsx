@@ -24,7 +24,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { teko } from "@/lib/fonts";
-import { getUserData, logout } from "@/actions/auth";
+import { logout } from "@/actions/auth";
+import { User } from "@/types/user";
+import { useUserStore } from "@/providers/UserProvider";
 
 const menuList = [
   {
@@ -58,6 +60,7 @@ const authPaths = ["/login", "/register", "/forgot-password"];
 
 export default function Sidebar() {
   const [open, setOpen] = useState<boolean>(false);
+  const { user, setUser } = useUserStore((state) => state);
   const pathname = usePathname();
 
   const isPathStartWithAuthPaths = authPaths.some((path) =>
@@ -79,7 +82,7 @@ export default function Sidebar() {
     >
       <Header open={open} setOpen={setOpen} />
       <MenuList open={open} pathname={pathname} />
-      <AvatarMenu open={open} />
+      <AvatarMenu open={open} user={user} setUser={setUser} />
     </nav>
   );
 }
@@ -135,32 +138,24 @@ function MenuList({ open, pathname }: { open: boolean; pathname: string }) {
   );
 }
 
-function AvatarMenu({ open }: { open: boolean }) {
+function AvatarMenu({
+  open,
+  user,
+  setUser,
+}: {
+  open: boolean;
+  user: User | null;
+  setUser: (user: User | null) => void;
+}) {
   const router = useRouter();
-  const [user, setUser] = useState<any | null>(null);
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      const res = await getUserData();
-
-      if (!res.success) {
-        console.error(res.data);
-        setUser(null);
-        return;
-      }
-
-      setUser(res.data);
-    };
-
-    fetchUser();
-  }, []);
-
   const handleLogout = async () => {
     const res = await logout();
 
     if (!res.success) {
       console.error(res.data);
     }
+
+    setUser(null);
 
     router.push("/login");
   };
@@ -177,7 +172,7 @@ function AvatarMenu({ open }: { open: boolean }) {
         )}
       >
         <Avatar className="rounded-lg">
-          <AvatarImage src={user?.image} alt="picture" />
+          <AvatarImage src={user.photo_url ?? ""} alt="picture" />
           <AvatarFallback>AV</AvatarFallback>
         </Avatar>
         {open && (

@@ -25,6 +25,7 @@ import { useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { login } from "@/actions/auth";
 import { useRouter } from "next/navigation";
+import { useUserStore } from "@/providers/UserProvider";
 
 export function LoginForm({
   className,
@@ -42,6 +43,7 @@ export function LoginForm({
     formState: { isSubmitting, errors },
   } = form;
   const router = useRouter();
+  const { setUser } = useUserStore((state) => state);
 
   const onSubmit = async (data: LoginSchema) => {
     try {
@@ -55,6 +57,8 @@ export function LoginForm({
       if (!res.success) {
         throw Error(res.data);
       }
+
+      setUser(res.data);
 
       router.push("/");
     } catch (error) {

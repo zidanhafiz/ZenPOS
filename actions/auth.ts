@@ -1,6 +1,7 @@
 "use server";
 import { loginSchema, registerSchema } from "@/lib/schemas";
 import { createClient } from "@/lib/supabase/server";
+import { User } from "@/types/user";
 import { revalidatePath } from "next/cache";
 
 type ActionResponse = {
@@ -68,20 +69,31 @@ export const login = async (formData: FormData): Promise<ActionResponse> => {
 
     const supabase = await createClient();
 
-    const { error: loginError } = await supabase.auth.signInWithPassword({
-      email: data.email,
-      password: data.password,
-    });
+    const { data: loginData, error: loginError } =
+      await supabase.auth.signInWithPassword({
+        email: data.email,
+        password: data.password,
+      });
 
     if (loginError) {
       throw loginError;
+    }
+
+    const { data: userData, error: userError } = await supabase
+      .from("users")
+      .select()
+      .eq("id", loginData.user.id)
+      .single();
+
+    if (userError) {
+      throw userError;
     }
 
     revalidatePath("/", "layout");
 
     return {
       success: true,
-      data: "User logged in successfully",
+      data: userData,
     };
   } catch (error) {
     console.error(error);
@@ -136,7 +148,7 @@ export const logout = async (): Promise<ActionResponse> => {
   }
 };
 
-export const getUserData = async (): Promise<ActionResponse> => {
+export const getUserData = async (): Promise<User | null> => {
   try {
     const supabase = await createClient();
     const {
@@ -162,15 +174,9 @@ export const getUserData = async (): Promise<ActionResponse> => {
       throw userError;
     }
 
-    return {
-      success: true,
-      data: userData,
-    };
+    return userData
   } catch (error) {
     console.error(error);
-    return {
-      success: false,
-      data: (error as Error).message ?? "Something went wrong",
-    };
+    return null
   }
 };
