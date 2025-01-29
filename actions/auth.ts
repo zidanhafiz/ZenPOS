@@ -3,6 +3,7 @@ import { loginSchema, registerSchema } from "@/lib/schemas";
 import { createClient } from "@/lib/supabase/server";
 import { User } from "@/types/user";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 type ActionResponse = {
   success: boolean;
@@ -148,7 +149,7 @@ export const logout = async (): Promise<ActionResponse> => {
   }
 };
 
-export const getUserData = async (): Promise<User | null> => {
+export const getUserData = async (): Promise<User> => {
   try {
     const supabase = await createClient();
     const {
@@ -177,6 +178,6 @@ export const getUserData = async (): Promise<User | null> => {
     return userData
   } catch (error) {
     console.error(error);
-    return null
+    redirect("/login");
   }
 };

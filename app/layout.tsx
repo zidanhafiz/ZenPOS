@@ -29,9 +29,9 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           <UserStoreProvider user={user}>
-            <div className="flex gap-4">
+            <div className="flex">
               <Sidebar />
-              <div className="mt-4">{children}</div>
+              <div className="flex-1 mx-6 py-6 h-screen">{children}</div>
             </div>
             <Toaster />
           </UserStoreProvider>

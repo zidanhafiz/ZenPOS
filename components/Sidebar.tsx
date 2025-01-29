@@ -76,7 +76,7 @@ export default function Sidebar() {
       className={cn(
         "bg-card max-w-[55%] px-3 py-5 rounded-lg shadow h-screen md:relative flex flex-col",
         open
-          ? "w-full absolute left-0 top-0 bottom-0 md:relative md:w-[250px]"
+          ? "w-full absolute left-0 top-0 bottom-0 z-50 md:relative md:w-[250px]"
           : "w-fit"
       )}
     >
