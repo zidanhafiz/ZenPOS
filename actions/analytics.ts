@@ -38,10 +38,6 @@ export const getTotalRevenue = async () => {
       throw transactionsError;
     }
 
-    if (!transactionsData || transactionsData.length === 0) {
-      throw new Error("transactions data is empty");
-    }
-
     // Calculate total revenue by month
     const revenueByMonth: Record<string, number> = transactionsData.reduce(
       (acc: Record<string, number>, record) => {
