@@ -13,20 +13,20 @@ export type Database = {
         Row: {
           cart_id: string
           product_id: string | null
-          quantity: number | null
-          total_price: number | null
+          quantity: number
+          total_price: number
         }
         Insert: {
           cart_id?: string
           product_id?: string | null
-          quantity?: number | null
-          total_price?: number | null
+          quantity?: number
+          total_price?: number
         }
         Update: {
           cart_id?: string
           product_id?: string | null
-          quantity?: number | null
-          total_price?: number | null
+          quantity?: number
+          total_price?: number
         }
         Relationships: [
           {
