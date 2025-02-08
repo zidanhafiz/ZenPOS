@@ -1,24 +1,8 @@
 "use server";
-import { createClient } from "@/lib/supabase/server";
+import { type SupabaseClient } from "@supabase/supabase-js";
 
-export const getAnalyticsData = async () => {
-  const revenue = await getTotalRevenue();
-  const orders = await getTotalOrders();
-  const sales = await getAverageSales();
-  const products = await getTotalProductSales();
-
-  return {
-    revenue,
-    orders,
-    sales,
-    products,
-  };
-};
-
-export const getTotalRevenue = async () => {
+export const getTotalRevenue = async (supabase: SupabaseClient) => {
   try {
-    const supabase = await createClient();
-
     // Get current and last month dates
     const now = new Date();
     const currentMonth = now.toISOString().slice(0, 7); // Format: YYYY-MM
@@ -76,10 +60,8 @@ export const getTotalRevenue = async () => {
   }
 };
 
-export const getTotalOrders = async () => {
+export const getTotalOrders = async (supabase: SupabaseClient) => {
   try {
-    const supabase = await createClient();
-
     // Get current and last month dates
     const now = new Date();
     const currentMonth = now.toISOString().slice(0, 7);
@@ -130,10 +112,8 @@ export const getTotalOrders = async () => {
   }
 };
 
-export const getAverageSales = async () => {
+export const getAverageSales = async (supabase: SupabaseClient) => {
   try {
-    const supabase = await createClient();
-
     // Get current and last month dates
     const now = new Date();
     const currentMonth = now.toISOString().slice(0, 7);
@@ -211,10 +191,8 @@ export const getAverageSales = async () => {
   }
 };
 
-export const getTotalProductSales = async () => {
+export const getTotalProductSales = async (supabase: SupabaseClient) => {
   try {
-    const supabase = await createClient();
-
     // Get current and last month dates
     const now = new Date();
     const currentMonth = now.toISOString().slice(0, 7);
@@ -268,10 +246,8 @@ export const getTotalProductSales = async () => {
   }
 };
 
-export const getTotalVisitors = async () => {
+export const getTotalVisitors = async (supabase: SupabaseClient) => {
   try {
-    const supabase = await createClient();
-
     // Get current and last month dates
     const now = new Date();
     const currentMonth = now.toISOString().slice(0, 7);
@@ -325,11 +301,9 @@ export const getTotalVisitors = async () => {
   }
 };
 
-export const getRevenueOverview = async () => {
+export const getRevenueOverview = async (supabase: SupabaseClient) => {
   const now = new Date();
   try {
-    const supabase = await createClient();
-
     // Get dates for the last 6 months
     const sixMonthsAgo = new Date(now.getFullYear(), now.getMonth() - 5, 1);
 
@@ -382,10 +356,8 @@ export const getRevenueOverview = async () => {
   }
 };
 
-export const getTopSales = async () => {
+export const getTopSales = async (supabase: SupabaseClient) => {
   try {
-    const supabase = await createClient();
-
     // Get current month's start date
     const now = new Date();
     const startOfMonth = new Date(
