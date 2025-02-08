@@ -34,6 +34,10 @@ function OverviewSection() {
     ErrorResponse
   >("/api/analytics/overview", fetcher);
 
+  if (error) {
+    throw new Error(error.message);
+  }
+
   if (isLoading || !data) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 w-full">
@@ -43,10 +47,6 @@ function OverviewSection() {
         <Skeleton className="w-full h-40" />
       </div>
     );
-  }
-
-  if (error) {
-    throw new Error(error.message);
   }
 
   return (
@@ -93,12 +93,12 @@ function SalesChartSection() {
     ErrorResponse
   >("/api/analytics/revenue", fetcher);
 
-  if (isLoading || !data) {
-    return <Skeleton className="w-full h-60" />;
-  }
-
   if (error) {
     throw new Error(error.message);
+  }
+
+  if (isLoading || !data) {
+    return <Skeleton className="w-full h-60" />;
   }
 
   return <SalesChart revenueData={data.data} />;
@@ -110,12 +110,12 @@ function VisitorsChartSection() {
     fetcher
   );
 
-  if (isLoading || !data) {
-    return <Skeleton className="w-full h-60" />;
-  }
-
   if (error) {
     throw new Error(error.message);
+  }
+
+  if (isLoading || !data) {
+    return <Skeleton className="w-52 h-60" />;
   }
 
   return (
@@ -132,6 +132,10 @@ function TopSalesChartSection() {
     fetcher
   );
 
+  if (error) {
+    throw new Error(error.message);
+  }
+
   if (isLoading || !data) {
     return (
       <div className="flex flex-col gap-4">
@@ -141,10 +145,6 @@ function TopSalesChartSection() {
         <Skeleton className="w-full h-10" />
       </div>
     );
-  }
-
-  if (error) {
-    throw new Error(error.message);
   }
 
   return <TopSalesTable />;
