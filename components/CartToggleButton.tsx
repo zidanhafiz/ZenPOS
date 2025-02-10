@@ -2,9 +2,13 @@
 import { useCartStore } from "@/providers/CartProvider";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 export default function CartToggleButton() {
   const { cart, toggleCart } = useCartStore((state) => state);
+  const pathname = usePathname();
+
+  if (pathname !== "/cashier") return null;
 
   return (
     <Button onClick={toggleCart} className="2xl:hidden relative">

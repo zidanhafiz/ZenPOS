@@ -92,3 +92,30 @@ export const forgotPasswordSchema = z.object({
 });
 
 export type ForgotPasswordSchema = z.infer<typeof forgotPasswordSchema>;
+
+export const searchProductSchema = z.object({
+  query: z.string().max(30, {
+    message: "Query maximum length is 30 characters",
+  }),
+  category: z.string().max(30, {
+    message: "Category maximum length is 30 characters",
+  }),
+  sortBy: z
+    .string()
+    .min(1, {
+      message: "Sort by minimum length is 3 character",
+    })
+    .max(30, {
+      message: "Sort by maximum length is 30 characters",
+    }),
+  order: z
+    .string()
+    .min(1, {
+      message: "Order minimum length is 3 character",
+    })
+    .max(30, {
+      message: "Order maximum length is 30 characters",
+    }),
+});
+
+export type SearchProductSchema = z.infer<typeof searchProductSchema>;

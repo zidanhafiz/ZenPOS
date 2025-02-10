@@ -257,7 +257,12 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      distinct_category: {
+        Row: {
+          category: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       [_ in never]: never

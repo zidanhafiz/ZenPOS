@@ -52,7 +52,7 @@ export function CartEditDialog({ children }: { children: ReactNode }) {
         <DialogHeader>
           <DialogTitle>Edit order</DialogTitle>
           <DialogDescription>
-            Make changes to your order here. Click save when you're done.
+            Make changes to your order here. Click save when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
         <div className="flex items-center gap-2 w-fit">

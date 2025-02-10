@@ -1,23 +1,19 @@
 import PageContainer from "@/components/PageContainer";
-import ProductCard from "./ProductCard";
-import { getAllProducts } from "@/actions/products";
+import ProductList from "./ProductList";
+import SearchProductForm from "./SearchProductForm";
+import { CashierProductStoreProvider } from "@/providers/CashierProductProvider";
+import { Separator } from "@/components/ui/separator";
 
 export default async function CashierPage() {
-  const products = await getAllProducts();
-
-  if (!products.success) {
-    throw new Error(products.error);
-  }
-
   return (
     <PageContainer title="Cashier" description="Cashier system application">
-      <div className="flex gap-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 w-full">
-          {products.data?.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
+      <CashierProductStoreProvider>
+        <div>
+          <SearchProductForm />
+          <Separator className="my-5" />
+          <ProductList />
         </div>
-      </div>
+      </CashierProductStoreProvider>
     </PageContainer>
   );
 }
