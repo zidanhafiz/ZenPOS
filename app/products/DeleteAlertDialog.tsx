@@ -11,17 +11,22 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { ReactNode } from "react";
 
 export default function DeleteAlertDialog({
   productId,
+  size = "sm",
+  children,
 }: {
   productId: string;
+  size?: "sm" | "default";
+  children?: ReactNode;
 }) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="destructive" size="sm">
-          Delete
+        <Button variant="destructive" size={size}>
+          {children}
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>

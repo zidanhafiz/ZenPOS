@@ -20,3 +20,27 @@ export const getAllProducts = async () => {
     };
   }
 };
+
+export const getProductById = async (id: string) => {
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from("products")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+    if (error) throw error;
+
+    return {
+      success: true,
+      data: data,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      error: (error as Error).message,
+    };
+  }
+};

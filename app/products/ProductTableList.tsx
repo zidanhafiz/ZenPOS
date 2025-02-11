@@ -69,7 +69,9 @@ function ProductTable({ products }: { products: Product[] }) {
               <Button size="sm" asChild>
                 <Link href={`/products/${product.id}`}>Details</Link>
               </Button>
-              <DeleteAlertDialog productId={product.id} />
+              <DeleteAlertDialog productId={product.id} size="sm">
+                Delete
+              </DeleteAlertDialog>
             </TableCell>
           </TableRow>
         ))}

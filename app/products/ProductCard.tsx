@@ -11,6 +11,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { formatToRupiah } from "@/lib/stringUtils";
 import { Product } from "@/types/product";
+import { ArrowUpRightIcon, MoveUpRightIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -38,7 +39,10 @@ export default function ProductCard({ product }: { product: Product }) {
           {formatToRupiah(product.price)}
         </span>
         <Button asChild>
-          <Link href={`/products/${product.id}`}>Details</Link>
+          <Link href={`/products/${product.id}`}>
+            Details
+            <ArrowUpRightIcon />
+          </Link>
         </Button>
       </CardFooter>
     </Card>

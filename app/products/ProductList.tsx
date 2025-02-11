@@ -6,6 +6,7 @@ import { useState } from "react";
 import ProductTableList from "./ProductTableList";
 import ProductGridList from "./ProductGridList";
 import ProductListPagination from "./ProductListPagination";
+import AddProductButton from "./AddProductButton";
 
 export default function ProductList() {
   const { products, isLoading, error, view } = useProductStore(
@@ -21,8 +22,11 @@ export default function ProductList() {
   }
 
   return (
-    <div className="grid gap-3 mt-3">
-      <ViewToggleButton />
+    <div className="grid gap-3">
+      <div className="flex justify-between items-center">
+        <ViewToggleButton />
+        <AddProductButton />
+      </div>
       {view === "grid" ? (
         <ProductGridList products={products} />
       ) : (
