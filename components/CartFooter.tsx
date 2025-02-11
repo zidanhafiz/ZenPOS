@@ -12,7 +12,7 @@ export default function CartFooter() {
     <CardFooter className="flex flex-col gap-4">
       <PriceSection totalPrice={cart?.total_price || 0} />
       <div className="w-full mt-4 space-y-2">
-        <Button className="w-full" size="lg">
+        <Button className="w-full" size="lg" disabled={!cart}>
           Pay Now
         </Button>
         <DiscardCartDialog />

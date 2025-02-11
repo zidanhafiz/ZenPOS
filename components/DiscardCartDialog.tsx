@@ -14,12 +14,17 @@ import { Button } from "./ui/button";
 import { useCartStore } from "@/providers/CartProvider";
 
 export default function DiscardCartDialog() {
-  const { clearCart } = useCartStore((state) => state);
+  const { clearCart, cart } = useCartStore((state) => state);
 
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button className="w-full" size="lg" variant="secondary">
+        <Button
+          className="w-full"
+          size="lg"
+          variant="secondary"
+          disabled={!cart}
+        >
           Discard
         </Button>
       </AlertDialogTrigger>
@@ -33,9 +38,9 @@ export default function DiscardCartDialog() {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={() => clearCart()}>
-            Continue
-          </AlertDialogAction>
+          <Button variant="destructive" onClick={() => clearCart()} asChild>
+            <AlertDialogAction>Discard</AlertDialogAction>
+          </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
