@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
     const page = Number(searchParams.get("page")) || 1;
     const query = searchParams.get("q");
     const category = searchParams.get("category");
-    const itemsPerPage = 6;
+    const itemsPerPage = Number(searchParams.get("limit")) || 6;
 
     const supabase = await createClient();
     let queryBuilder = supabase

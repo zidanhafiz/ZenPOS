@@ -8,6 +8,7 @@ export type ProductState = {
   isLoading: boolean;
   error: Error | null;
   queryParams: URLSearchParams;
+  view: "grid" | "list";
 };
 
 export type ProductActions = {
@@ -16,6 +17,7 @@ export type ProductActions = {
   setCurrentPage: (page: number) => void;
   setLoading: (isLoading: boolean) => void;
   setError: (error: Error | null) => void;
+  setView: (view: "grid" | "list") => void;
   setQueryParams: (
     query: string,
     category: string,
@@ -32,6 +34,7 @@ export const defaultInitState: ProductState = {
   products: [],
   totalPages: 1,
   currentPage: 1,
+  view: "grid",
   isLoading: false,
   error: null,
   queryParams: new URLSearchParams({
@@ -56,6 +59,8 @@ export const createProductStore = (
     setLoading: (isLoading) => set(() => ({ isLoading })),
 
     setError: (error) => set(() => ({ error })),
+
+    setView: (view) => set(() => ({ view })),
 
     setQueryParams: (
       query: string,
