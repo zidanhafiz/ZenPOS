@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { File } from "buffer";
 
 export const loginSchema = z.object({
   email: z
@@ -119,3 +120,95 @@ export const searchProductSchema = z.object({
 });
 
 export type SearchProductSchema = z.infer<typeof searchProductSchema>;
+
+export const createProductSchema = z.object({
+  name: z
+    .string()
+    .min(3, {
+      message: "Name minimum length is 3 characters",
+    })
+    .max(30, {
+      message: "Name maximum length is 30 characters",
+    }),
+  description: z
+    .string()
+    .min(3, {
+      message: "Description minimum length is 3 characters",
+    })
+    .max(100, {
+      message: "Description maximum length is 100 characters",
+    }),
+  price: z
+    .number()
+    .min(1, {
+      message: "Price minimum length is 1 characters",
+    })
+    .max(1000000000, {
+      message: "Price maximum length is 1000000000 characters",
+    }),
+  stock: z.number().max(1000000000, {
+    message: "Stock maximum length is 1000000000 characters",
+  }),
+  category: z
+    .string()
+    .min(3, {
+      message: "Category minimum length is 3 characters",
+    })
+    .max(100, {
+      message: "Category maximum length is 100 characters",
+    }),
+});
+
+export const updateProductSchema = z.object({
+  name: z
+    .string()
+    .min(3, {
+      message: "Name minimum length is 3 characters",
+    })
+    .max(30, {
+      message: "Name maximum length is 30 characters",
+    }),
+  description: z
+    .string()
+    .min(3, {
+      message: "Description minimum length is 3 characters",
+    })
+    .max(100, {
+      message: "Description maximum length is 100 characters",
+    }),
+  price: z
+    .number()
+    .min(1, {
+      message: "Price minimum length is 1 characters",
+    })
+    .max(1000000000, {
+      message: "Price maximum length is 1000000000 characters",
+    }),
+  stock: z
+    .number()
+    .min(1, {
+      message: "Stock minimum length is 1 characters",
+    })
+    .max(1000000000, {
+      message: "Stock maximum length is 1000000000 characters",
+    }),
+  category: z
+    .string()
+    .min(3, {
+      message: "Category minimum length is 3 characters",
+    })
+    .max(100, {
+      message: "Category maximum length is 100 characters",
+    }),
+  image: z.string().max(500, {
+    message: "Image maximum length is 500 characters",
+  }),
+});
+
+export type UpdateProductSchema = z.infer<typeof updateProductSchema>;
+
+export const uploadProductImageSchema = z.object({
+  image: z.any(),
+});
+
+export type UploadProductImageSchema = z.infer<typeof uploadProductImageSchema>;

@@ -11,7 +11,7 @@ import { Separator } from "@/components/ui/separator";
 import { formatDate, formatToRupiah } from "@/lib/stringUtils";
 import { Button } from "@/components/ui/button";
 import DeleteAlertDialog from "../DeleteAlertDialog";
-import BackNavigation from "./BackNavigation";
+import BackNavigation from "../BackNavigation";
 import { Pencil, Trash } from "lucide-react";
 
 export default function ProductDetailCard({ product }: { product: Product }) {

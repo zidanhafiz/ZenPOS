@@ -2,7 +2,6 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { useProductStore } from "@/providers/ProductProvider";
 import ViewToggleButton from "./ViewToggleButton";
-import { useState } from "react";
 import ProductTableList from "./ProductTableList";
 import ProductGridList from "./ProductGridList";
 import ProductListPagination from "./ProductListPagination";
