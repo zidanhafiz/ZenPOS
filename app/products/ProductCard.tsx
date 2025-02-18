@@ -17,14 +17,14 @@ import Link from "next/link";
 
 export default function ProductCard({ product }: { product: Product }) {
   return (
-    <Card className="rounded-lg w-full">
+    <Card className="rounded-lg w-full flex flex-col">
       <CardHeader>
         <CardTitle>{product.name}</CardTitle>
         <CardDescription className="text-xs">
           {product.description}
         </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="flex-1">
         <Image
           src={product.image_url ?? ""}
           alt={product.name}

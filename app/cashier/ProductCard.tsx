@@ -18,14 +18,14 @@ import Image from "next/image";
 export default function ProductCard({ product }: { product: Product }) {
   const { addToCart } = useCartStore((state) => state);
   return (
-    <Card className="rounded-lg w-full">
+    <Card className="rounded-lg w-full flex flex-col">
       <CardHeader>
         <CardTitle>{product.name}</CardTitle>
         <CardDescription className="text-xs">
           {product.description}
         </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="flex-1">
         <Image
           src={product.image_url ?? ""}
           alt={product.name}
