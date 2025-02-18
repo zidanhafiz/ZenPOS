@@ -1,7 +1,7 @@
 "use client";
+import { deleteProduct } from "@/actions/products";
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -11,7 +11,9 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { ReactNode } from "react";
+import { toast } from "@/hooks/use-toast";
+import { usePathname, useRouter } from "next/navigation";
+import { ReactNode, useState } from "react";
 
 export default function DeleteAlertDialog({
   productId,
@@ -22,8 +24,44 @@ export default function DeleteAlertDialog({
   size?: "sm" | "default";
   children?: ReactNode;
 }) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  const handleDelete = async () => {
+    try {
+      setIsLoading(true);
+      const res = await deleteProduct(productId);
+
+      if (!res.success) {
+        throw new Error(res.data ?? "Failed to delete product");
+      }
+
+      toast({
+        title: "Success deleted product",
+        description: "Product deleted successfully",
+      });
+
+      if (pathname === "/products") {
+        router.refresh();
+      } else {
+        router.push("/products");
+      }
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: "Error deleting product",
+        description: "Failed to delete product",
+      });
+    } finally {
+      setIsLoading(false);
+      setIsOpen(false);
+    }
+  };
+
   return (
-    <AlertDialog>
+    <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogTrigger asChild>
         <Button variant="destructive" size={size}>
           {children}
@@ -38,9 +76,13 @@ export default function DeleteAlertDialog({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <Button variant="destructive" asChild>
-            <AlertDialogAction>Delete Product</AlertDialogAction>
+          <AlertDialogCancel disabled={isLoading}>Cancel</AlertDialogCancel>
+          <Button
+            variant="destructive"
+            onClick={handleDelete}
+            disabled={isLoading}
+          >
+            {isLoading ? "Deleting..." : "Delete Product"}
           </Button>
         </AlertDialogFooter>
       </AlertDialogContent>

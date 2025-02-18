@@ -13,3 +13,8 @@ export const formatDate = (date: string): string => {
     day: "numeric",
   });
 };
+
+export const getProductImagePath = (imageUrl: string) => {
+  const urlParts = imageUrl.split("/products/");
+  return urlParts[1];
+};

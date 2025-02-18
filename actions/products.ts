@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { File } from "buffer";
 import { z } from "zod";
+import { getProductImagePath } from "@/lib/stringUtils";
 
 export const getAllProducts = async () => {
   try {
@@ -76,7 +77,10 @@ export const createProduct = async (formData: FormData) => {
 
     if (!user.user) throw new Error("Unauthorized");
 
-    const imageName = `${name.split(" ")[0]}-${Date.now()}`;
+    const imageExt = image.name.split(".").pop();
+    const imageName = `${name
+      .split(" ")[0]
+      .toLowerCase()}-${Date.now()}.${imageExt}`;
     const imageBuffer = Buffer.from(await image.arrayBuffer());
 
     const { error: imageUploadError } = await supabase.storage
@@ -100,6 +104,52 @@ export const createProduct = async (formData: FormData) => {
       image_url: imageUrlData.publicUrl,
       user_id: user.user.id,
     });
+
+    if (error) throw error;
+
+    revalidatePath("/");
+    revalidatePath("/products");
+    revalidatePath("/cashier");
+    revalidateTag("products");
+
+    return {
+      success: true,
+      data: data,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      data: (error as Error).message,
+    };
+  }
+};
+
+export const deleteProduct = async (id: string) => {
+  try {
+    const supabase = await createClient();
+
+    const { data: product, error: productError } = await supabase
+      .from("products")
+      .select("image_url")
+      .eq("id", id)
+      .single();
+
+    if (productError) throw productError;
+
+    if (product.image_url) {
+      const imagePath = getProductImagePath(product.image_url);
+      const { error: imageDeleteError } = await supabase.storage
+        .from("products")
+        .remove([imagePath]);
+
+      if (imageDeleteError) throw imageDeleteError;
+    }
+
+    const { data, error } = await supabase
+      .from("products")
+      .delete()
+      .eq("id", id);
 
     if (error) throw error;
 
