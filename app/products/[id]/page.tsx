@@ -1,7 +1,7 @@
 import { getProductById } from "@/actions/products";
 import { notFound } from "next/navigation";
-import ProductDetailCard from "./ProductDetailCard";
 import PageContainer from "@/components/PageContainer";
+import ProductDetailDisplay from "./ProductDetailDisplay";
 
 export default async function ProductDetailPage({
   params,
@@ -17,7 +17,7 @@ export default async function ProductDetailPage({
 
   return (
     <PageContainer title={product.data.name} description="Product Details">
-      <ProductDetailCard product={product.data} />
+      <ProductDetailDisplay product={product.data} />
     </PageContainer>
   );
 }

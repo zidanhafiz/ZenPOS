@@ -13,8 +13,16 @@ import { Button } from "@/components/ui/button";
 import DeleteAlertDialog from "../DeleteAlertDialog";
 import BackNavigation from "../BackNavigation";
 import { Pencil, Trash } from "lucide-react";
+import { SetStateAction } from "react";
+import { Dispatch } from "react";
 
-export default function ProductDetailCard({ product }: { product: Product }) {
+export default function ProductDetailCard({
+  product,
+  setIsEditMode,
+}: {
+  product: Product;
+  setIsEditMode: Dispatch<SetStateAction<boolean>>;
+}) {
   return (
     <Card>
       <CardHeader>
@@ -31,7 +39,10 @@ export default function ProductDetailCard({ product }: { product: Product }) {
         <ProductDetailContent product={product} />
       </CardContent>
       <Separator />
-      <ProductActionButtons productId={product.id} />
+      <ProductActionButtons
+        productId={product.id}
+        setIsEditMode={setIsEditMode}
+      />
     </Card>
   );
 }
@@ -61,14 +72,20 @@ function ProductDetailContent({ product }: { product: Product }) {
   );
 }
 
-function ProductActionButtons({ productId }: { productId: string }) {
+function ProductActionButtons({
+  productId,
+  setIsEditMode,
+}: {
+  productId: string;
+  setIsEditMode: Dispatch<SetStateAction<boolean>>;
+}) {
   return (
     <CardFooter className="mt-4 flex gap-2 md:gap-4 justify-end">
       <DeleteAlertDialog productId={productId} size="default">
         <Trash />
         Delete Product
       </DeleteAlertDialog>
-      <Button>
+      <Button onClick={() => setIsEditMode(true)}>
         <Pencil />
         Edit Product
       </Button>

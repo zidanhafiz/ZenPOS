@@ -7,13 +7,18 @@ export default function ImagePreview({
   image,
   className,
 }: {
-  image?: File;
+  image?: File | string;
   className?: string;
 }) {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
 
   useEffect(() => {
     if (!image) return;
+
+    if (typeof image === "string") {
+      setImageUrl(image);
+      return;
+    }
 
     const reader = new FileReader();
     reader.onloadend = () => {

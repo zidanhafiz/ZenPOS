@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { File } from "buffer";
 
 export const loginSchema = z.object({
   email: z
@@ -200,15 +199,6 @@ export const updateProductSchema = z.object({
     .max(100, {
       message: "Category maximum length is 100 characters",
     }),
-  image: z.string().max(500, {
-    message: "Image maximum length is 500 characters",
-  }),
 });
 
 export type UpdateProductSchema = z.infer<typeof updateProductSchema>;
-
-export const uploadProductImageSchema = z.object({
-  image: z.any(),
-});
-
-export type UploadProductImageSchema = z.infer<typeof uploadProductImageSchema>;
