@@ -25,6 +25,7 @@ import DiscardAlertDialog from "@/components/DiscardAlertDialog";
 import { Product } from "@/types/product";
 import { SetStateAction, useState } from "react";
 import { Dispatch } from "react";
+import CategorySelect from "../CategorySelect";
 
 const formSchema = updateProductSchema.extend({
   image:
@@ -190,24 +191,7 @@ export function EditProductForm({
                         </FormItem>
                       )}
                     />
-                    <FormField
-                      control={form.control}
-                      name="category"
-                      render={({ field }) => (
-                        <FormItem className="grid gap-2">
-                          <FormLabel>Category</FormLabel>
-                          <FormControl>
-                            <Input
-                              placeholder="Enter Product Category"
-                              required
-                              disabled={isSubmitting}
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                    <CategorySelect form={form} />
                     <FormField
                       control={form.control}
                       name="price"
@@ -218,14 +202,13 @@ export function EditProductForm({
                             <Input
                               placeholder="Enter Product Price"
                               type="number"
+                              className="w-full md:w-52"
                               required
                               disabled={isSubmitting}
                               {...field}
                               onChange={(e) => {
                                 const value = e.target.value;
-                                if (value === "" || !isNaN(Number(value))) {
-                                  field.onChange(parseInt(value));
-                                }
+                                field.onChange(parseInt(value));
                               }}
                             />
                           </FormControl>
@@ -243,14 +226,13 @@ export function EditProductForm({
                             <Input
                               placeholder="Enter Product Stock"
                               type="number"
+                              className="w-full md:w-52"
                               required
                               disabled={isSubmitting}
                               {...field}
                               onChange={(e) => {
                                 const value = e.target.value;
-                                if (value === "" || !isNaN(Number(value))) {
-                                  field.onChange(parseInt(value));
-                                }
+                                field.onChange(parseInt(value));
                               }}
                             />
                           </FormControl>
