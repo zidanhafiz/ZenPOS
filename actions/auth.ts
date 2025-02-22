@@ -1,5 +1,10 @@
 "use server";
-import { loginSchema, registerSchema } from "@/lib/schemas";
+import {
+  editAccountSchema,
+  loginSchema,
+  registerSchema,
+  updateUserPasswordSchema,
+} from "@/lib/schemas";
 import { createClient } from "@/lib/supabase/server";
 import { User } from "@/types/user";
 import { revalidatePath } from "next/cache";
@@ -175,9 +180,105 @@ export const getUserData = async (): Promise<User> => {
       throw userError;
     }
 
-    return userData
+    return userData;
   } catch (error) {
     console.error(error);
     redirect("/login");
+  }
+};
+
+export const updateUser = async (
+  formData: FormData,
+  userId: string
+): Promise<ActionResponse> => {
+  try {
+    const {
+      success,
+      error: schemaError,
+      data,
+    } = await editAccountSchema.safeParseAsync(Object.fromEntries(formData));
+
+    if (!success) {
+      throw Error(schemaError.message);
+    }
+
+    const supabase = await createClient();
+
+    const { error: updateError } = await supabase.auth.updateUser({
+      email: data.email,
+      data: {
+        first_name: data.firstName,
+        last_name: data.lastName,
+      },
+    });
+
+    if (updateError) {
+      throw updateError;
+    }
+
+    const { data: userData, error: userError } = await supabase
+      .from("users")
+      .update({
+        first_name: data.firstName,
+        last_name: data.lastName,
+        email: data.email,
+      })
+      .eq("id", userId);
+
+    if (userError) {
+      throw userError;
+    }
+
+    revalidatePath("/", "layout");
+
+    return {
+      success: true,
+      data: userData,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      data: (error as Error).message,
+    };
+  }
+};
+
+export const updateUserPassword = async (
+  formData: FormData
+): Promise<ActionResponse> => {
+  try {
+    const {
+      success,
+      error: schemaError,
+      data,
+    } = await updateUserPasswordSchema.safeParseAsync(
+      Object.fromEntries(formData)
+    );
+
+    if (!success) {
+      throw Error(schemaError.message);
+    }
+
+    const supabase = await createClient();
+
+    const { error: updateError } = await supabase.auth.updateUser({
+      password: data.newPassword,
+    });
+
+    if (updateError) {
+      throw updateError;
+    }
+
+    return {
+      success: true,
+      data: "Password updated successfully",
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      data: (error as Error).message,
+    };
   }
 };

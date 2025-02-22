@@ -202,3 +202,58 @@ export const updateProductSchema = z.object({
 });
 
 export type UpdateProductSchema = z.infer<typeof updateProductSchema>;
+
+export const editAccountSchema = z.object({
+  firstName: z
+    .string()
+    .min(3, {
+      message: "First name minimum length is 3 characters",
+    })
+    .max(30, {
+      message: "First name maximum length is 30 characters",
+    }),
+  lastName: z
+    .string()
+    .min(3, {
+      message: "Last name minimum length is 3 characters",
+    })
+    .max(30, {
+      message: "Last name maximum length is 30 characters",
+    }),
+  email: z
+    .string()
+    .email({
+      message: "Invalid email address",
+    })
+    .max(30, {
+      message: "Email maximum length is 30 characters",
+    }),
+});
+
+export type EditAccountSchema = z.infer<typeof editAccountSchema>;
+
+export const updateUserPasswordSchema = z
+  .object({
+    newPassword: z
+      .string()
+      .min(8, {
+        message: "Password minimum length is 8 characters",
+      })
+      .max(30, {
+        message: "Password maximum length is 30 characters",
+      }),
+    confirmPassword: z
+      .string()
+      .min(8, {
+        message: "Password minimum length is 8 characters",
+      })
+      .max(30, {
+        message: "Password maximum length is 30 characters",
+      }),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
+
+export type UpdateUserPasswordSchema = z.infer<typeof updateUserPasswordSchema>;
