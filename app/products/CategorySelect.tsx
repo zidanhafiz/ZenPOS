@@ -28,12 +28,19 @@ import useSWR from "swr";
 import { CategoryResponse } from "@/types/api-response/categoryType";
 import { ErrorResponse } from "@/types/api-response/ErrorResponse";
 import { useState } from "react";
+import { CreateProductSchema, UpdateProductSchema } from "@/lib/schemas";
+
+type FormData =
+  | CreateProductSchema
+  | (UpdateProductSchema & {
+      category: string;
+    });
 
 export default function CategorySelect({
   form,
   className,
 }: {
-  form: UseFormReturn<any>;
+  form: UseFormReturn<FormData>;
   className?: string;
 }) {
   const { data: categories } = useSWR<CategoryResponse, ErrorResponse>(
@@ -41,7 +48,6 @@ export default function CategorySelect({
     fetcher
   );
   const [open, setOpen] = useState<boolean>(false);
-
   const [newCategory, setNewCategory] = useState<string | null>(null);
 
   return (
@@ -88,9 +94,11 @@ export default function CategorySelect({
                       size="sm"
                       className="w-full text-start"
                       onClick={() => {
-                        form.setValue("category", newCategory);
-                        setNewCategory(null);
-                        setOpen(false);
+                        if (newCategory) {
+                          form.setValue("category", newCategory);
+                          setNewCategory(null);
+                          setOpen(false);
+                        }
                       }}
                     >
                       <Plus className="w-4 h-4" />

@@ -158,6 +158,8 @@ export const createProductSchema = z.object({
     }),
 });
 
+export type CreateProductSchema = z.infer<typeof createProductSchema>;
+
 export const updateProductSchema = z.object({
   name: z
     .string()
