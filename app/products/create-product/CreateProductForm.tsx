@@ -23,6 +23,7 @@ import { createProduct } from "@/actions/products";
 import { useToast } from "@/hooks/use-toast";
 import DiscardAlertDialog from "@/components/DiscardAlertDialog";
 import CategorySelect from "../CategorySelect";
+import { useSWRConfig } from "swr";
 
 const formSchema = createProductSchema.extend({
   image:
@@ -62,6 +63,7 @@ export function CreateProductForm({
   } = form;
   const router = useRouter();
   const { toast } = useToast();
+  const { mutate } = useSWRConfig();
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
@@ -85,6 +87,7 @@ export function CreateProductForm({
         description: "Product has been created successfully",
       });
 
+      await mutate("/api/products");
       router.push("/products");
     } catch (error) {
       console.error(error);

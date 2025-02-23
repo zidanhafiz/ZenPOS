@@ -16,10 +16,14 @@ import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import DiscardAlertDialog from "@/components/DiscardAlertDialog";
 import { editAccountSchema, EditAccountSchema } from "@/lib/schemas";
-import { User } from "@/types/user";
 import { updateUser } from "@/actions/auth";
+import { useUserStore } from "@/providers/UserProvider";
+import { useSWRConfig } from "swr";
 
-export default function EditAccountForm({ user }: { user: User }) {
+export default function EditAccountForm() {
+  const { user } = useUserStore((state) => state);
+  const { mutate } = useSWRConfig();
+
   const form = useForm<EditAccountSchema>({
     resolver: zodResolver(editAccountSchema),
     defaultValues: {
@@ -53,6 +57,7 @@ export default function EditAccountForm({ user }: { user: User }) {
         description: "Account has been updated successfully",
       });
 
+      await mutate("/api/get-user");
       router.push("/settings");
     } catch (error) {
       console.error(error);

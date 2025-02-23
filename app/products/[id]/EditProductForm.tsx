@@ -26,6 +26,7 @@ import { Product } from "@/types/product";
 import { SetStateAction, useState } from "react";
 import { Dispatch } from "react";
 import CategorySelect from "../CategorySelect";
+import { useSWRConfig } from "swr/_internal";
 
 const formSchema = updateProductSchema.extend({
   image:
@@ -74,6 +75,7 @@ export function EditProductForm({
   } = form;
   const router = useRouter();
   const { toast } = useToast();
+  const { mutate } = useSWRConfig();
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
@@ -97,6 +99,7 @@ export function EditProductForm({
         description: "Product has been updated successfully",
       });
 
+      await mutate("/api/products");
       router.push("/products");
     } catch (error) {
       console.error(error);

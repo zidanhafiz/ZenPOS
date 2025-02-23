@@ -20,8 +20,7 @@ import {
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { User } from "@/types/user";
-import { getUserData } from "@/actions/auth";
+import { useUserStore } from "@/providers/UserProvider";
 
 const data = {
   navMain: [
@@ -56,21 +55,8 @@ const data = {
 const authPages = ["/login", "/register", "/forgot-password"];
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const [user, setUser] = React.useState<User | null>(null);
+  const { user } = useUserStore((state) => state);
   const pathname = usePathname();
-
-  React.useEffect(() => {
-    const getUser = async () => {
-      try {
-        const user = await getUserData();
-        setUser(user);
-      } catch (error) {
-        console.error(error);
-        setUser(null);
-      }
-    };
-    getUser();
-  }, []);
 
   const isAuthPage = authPages.some((path) => pathname.startsWith(path));
 

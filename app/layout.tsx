@@ -7,6 +7,7 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import Cart from "../components/Cart";
 import { CartStoreProvider } from "@/providers/CartProvider";
+import { UserStoreProvider } from "@/providers/UserProvider";
 
 export const metadata: Metadata = {
   title: "ZenPOS",
@@ -27,14 +28,16 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <SidebarProvider>
-            <CartStoreProvider>
-              <AppSidebar />
-              <div className="w-full mx-6 py-6">{children}</div>
-              <Cart />
-            </CartStoreProvider>
-          </SidebarProvider>
-          <Toaster />
+          <UserStoreProvider>
+            <SidebarProvider>
+              <CartStoreProvider>
+                <AppSidebar />
+                <div className="w-full mx-6 py-6">{children}</div>
+                <Cart />
+              </CartStoreProvider>
+            </SidebarProvider>
+            <Toaster />
+          </UserStoreProvider>
         </ThemeProvider>
       </body>
     </html>

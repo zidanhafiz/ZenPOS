@@ -19,12 +19,11 @@ import {
   updateUserPasswordSchema,
   UpdateUserPasswordSchema,
 } from "@/lib/schemas";
-import { User } from "@/types/user";
 import { updateUserPassword } from "@/actions/auth";
 import { useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 
-export default function ChangePasswordForm({ user }: { user: User }) {
+export default function ChangePasswordForm() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const form = useForm<UpdateUserPasswordSchema>({
     resolver: zodResolver(updateUserPasswordSchema),

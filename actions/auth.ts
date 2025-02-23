@@ -7,7 +7,7 @@ import {
 } from "@/lib/schemas";
 import { createClient } from "@/lib/supabase/server";
 import { User } from "@/types/user";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
 type ActionResponse = {
@@ -110,7 +110,9 @@ export const login = async (formData: FormData): Promise<ActionResponse> => {
   }
 };
 
-export const resendVerificationEmail = async (email: string) => {
+export const resendVerificationEmail = async (
+  email: string
+): Promise<string> => {
   try {
     const supabase = await createClient();
     const { error } = await supabase.auth.resend({
@@ -158,22 +160,22 @@ export const getUserData = async (): Promise<User> => {
   try {
     const supabase = await createClient();
     const {
-      data: { user },
+      data: { session },
       error,
-    } = await supabase.auth.getUser();
+    } = await supabase.auth.getSession();
 
     if (error) {
       throw error;
     }
 
-    if (!user) {
+    if (!session) {
       throw Error("User not found");
     }
 
     const { data: userData, error: userError } = await supabase
       .from("users")
       .select("*")
-      .eq("id", user.id)
+      .eq("id", session.user.id)
       .single();
 
     if (userError) {
@@ -230,6 +232,8 @@ export const updateUser = async (
     }
 
     revalidatePath("/", "layout");
+    revalidatePath("/settings", "page");
+    revalidateTag("user");
 
     return {
       success: true,

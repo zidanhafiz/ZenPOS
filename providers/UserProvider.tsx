@@ -7,13 +7,16 @@ import {
   useEffect,
 } from "react";
 import { useStore } from "zustand";
-
 import {
   type UserStore,
   createUserStore,
-  initUserStore,
+  defaultInitState,
 } from "@/stores/userStore";
-import { User } from "@/types/user";
+import useSWR from "swr";
+import { ErrorResponse } from "@/types/api-response/ErrorResponse";
+import { UserResponse } from "@/types/api-response/userTypes";
+import fetcher from "@/lib/fetcher";
+import { useRouter } from "next/navigation";
 
 export type UserStoreApi = ReturnType<typeof createUserStore>;
 
@@ -23,17 +26,39 @@ export const UserStoreContext = createContext<UserStoreApi | undefined>(
 
 export interface UserStoreProviderProps {
   children: ReactNode;
-  user: User | null;
 }
 
-export const UserStoreProvider = ({
-  children,
-  user,
-}: UserStoreProviderProps) => {
+export const UserStoreProvider = ({ children }: UserStoreProviderProps) => {
   const storeRef = useRef<UserStoreApi>(null);
+  const router = useRouter();
+
   if (!storeRef.current) {
-    storeRef.current = createUserStore(initUserStore(user));
+    storeRef.current = createUserStore(defaultInitState);
   }
+
+  const state = useStore(storeRef.current);
+
+  const { data, isLoading, error } = useSWR<UserResponse, ErrorResponse>(
+    `/api/get-user`,
+    fetcher,
+  );
+
+  useEffect(() => {
+    if (isLoading || !data) {
+      state.setIsLoading(true);
+    }
+
+    if (data) {
+      state.setUser(data.data);
+      state.setIsLoading(false);
+    }
+
+    if (error) {
+      state.setError(new Error(error.message));
+      state.setIsLoading(false);
+      router.push("/login");
+    }
+  }, [data, isLoading, error, router]);
 
   return (
     <UserStoreContext.Provider value={storeRef.current}>

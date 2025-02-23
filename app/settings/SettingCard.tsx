@@ -11,13 +11,20 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "@/hooks/use-toast";
-import { User } from "@/types/user";
 import { BadgeCheck, BadgeX } from "lucide-react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useUserStore } from "@/providers/UserProvider";
 
-export default function SettingCard({ user }: { user: User }) {
+export default function SettingCard() {
   const [countdown, setCountdown] = useState<number>(0);
+  const { user } = useUserStore((state) => state);
+
+  useEffect(() => {
+    if (countdown > 0) {
+      setTimeout(() => setCountdown(countdown - 1), 1000);
+    }
+  }, [countdown]);
 
   const handleVerifyEmail = async () => {
     const res = await resendVerificationEmail(user.email);
@@ -26,12 +33,6 @@ export default function SettingCard({ user }: { user: User }) {
     });
     setCountdown(60);
   };
-
-  useEffect(() => {
-    if (countdown > 0) {
-      setTimeout(() => setCountdown(countdown - 1), 1000);
-    }
-  }, [countdown]);
 
   return (
     <Card className="max-w-2xl">
