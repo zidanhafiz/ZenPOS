@@ -258,7 +258,7 @@ export const getTotalVisitors = async (supabase: SupabaseClient) => {
     const { data, error } = await supabase
       .from("transactions")
       .select("created_at, payment_status")
-      .eq("payment_status", "COMPLETED")
+      .eq("payment_status", "PAID")
       .gte("created_at", new Date(lastMonth).toISOString())
       .order("created_at", { ascending: true });
 

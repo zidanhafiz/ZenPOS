@@ -28,7 +28,7 @@ export const saveTransaction = async (cart: CartData) => {
         payment_method: cart.payment_method,
         total_payment: cart.total_payment,
         total_price: cart.total_price,
-        payment_status: "paid",
+        payment_status: "PAID",
         quantity: cart.quantity,
         user_id: user.user.id,
       })
