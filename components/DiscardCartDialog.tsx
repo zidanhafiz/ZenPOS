@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "./ui/button";
 import { useCartStore } from "@/providers/CartProvider";
+import { Trash2 } from "lucide-react";
 
 export default function DiscardCartDialog() {
   const { clearCart, cart } = useCartStore((state) => state);
@@ -22,9 +23,10 @@ export default function DiscardCartDialog() {
         <Button
           className="w-full"
           size="lg"
-          variant="secondary"
+          variant="destructive"
           disabled={!cart}
         >
+          <Trash2 size={16} />
           Discard
         </Button>
       </AlertDialogTrigger>

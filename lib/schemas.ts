@@ -259,3 +259,12 @@ export const updateUserPasswordSchema = z
   });
 
 export type UpdateUserPasswordSchema = z.infer<typeof updateUserPasswordSchema>;
+
+export const saveOrderSchema = z.object({
+  paymentMethod: z.string().min(3, {
+    message: "Payment method minimum length is 3 characters",
+  }),
+  totalPayment: z.number().min(1, {
+    message: "Total payment minimum length is 1",
+  }),
+});

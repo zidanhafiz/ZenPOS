@@ -91,10 +91,7 @@ export const createCartStore = (initState: CartState = defaultInitState) => {
         total_price: totalPrice,
         total_payment: 0,
         created_at: currentCart?.created_at || new Date().toISOString(),
-        is_delivered: currentCart?.is_delivered || false,
-        payment_at: currentCart?.payment_at || "",
         payment_method: currentCart?.payment_method || "",
-        buyer_name: currentCart?.buyer_name || "",
         payment_status: currentCart?.payment_status || "",
         cart_items: cartItems,
       };
@@ -120,6 +117,12 @@ export const createCartStore = (initState: CartState = defaultInitState) => {
         (sum, item) => sum + item.total_price,
         0
       );
+
+      if (updatedCartItems.length === 0) {
+        localStorage.removeItem(CART_STORAGE_KEY);
+        set(() => ({ cart: null }));
+        return;
+      }
 
       const updatedCart = {
         ...currentCart,
