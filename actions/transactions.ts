@@ -62,3 +62,27 @@ export const saveTransaction = async (cart: CartData) => {
     };
   }
 };
+
+export const getTransactionById = async (id: string) => {
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from("transactions")
+      .select("*, transaction_items(*)")
+      .eq("id", id)
+      .single();
+
+    if (error) throw error;
+
+    return {
+      success: true,
+      data: data,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      error: (error as Error).message,
+    };
+  }
+};
