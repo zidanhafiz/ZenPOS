@@ -50,7 +50,7 @@ export default function VisitorChart({
   ];
 
   return (
-    <Card className="flex flex-col xl:max-w-[400px]">
+    <Card className="flex flex-col w-full xl:max-w-[400px] xl:max-h-[650px]">
       <CardHeader className="items-center pb-0">
         <CardTitle>Visitors</CardTitle>
         <CardDescription>
@@ -60,7 +60,7 @@ export default function VisitorChart({
       <CardContent className="flex-1 pb-0">
         <ChartContainer
           config={chartConfig}
-          className="mx-auto aspect-square max-h-[250px]"
+          className="mx-auto aspect-square max-h-[350px] lg:h-full"
         >
           <RadialBarChart
             data={chartData}

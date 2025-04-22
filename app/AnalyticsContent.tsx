@@ -1,7 +1,6 @@
 "use client";
 import { BadgeDollarSign, Box, Coins, NotepadText } from "lucide-react";
 import VisitorChart from "@/components/VisitorChart";
-import TopSalesTable from "@/components/TopSalesTable";
 import SalesChart from "@/components/SalesChart";
 import ReportCard from "@/components/ReportCard";
 import { formatToRupiah } from "@/lib/stringUtils";
@@ -19,11 +18,10 @@ export default function AnalyticsContent() {
   return (
     <>
       <OverviewSection />
-      <div className="my-6 grid grid-cols-1 xl:grid-cols-[1fr,auto] gap-4 w-full">
+      <div className="mt-6 grid grid-cols-1 xl:flex gap-4 w-full">
         <SalesChartSection />
         <VisitorsChartSection />
       </div>
-      <TopSalesChartSection />
     </>
   );
 }
@@ -68,7 +66,7 @@ function OverviewSection() {
         date="from last month"
       />
       <ReportCard
-        title="Average Sale"
+        title="Average Daily Sales"
         value={formatToRupiah(data.data.sales.value)}
         badgeColor="bg-green-100"
         logo={<Coins className="text-green-500" />}
@@ -98,7 +96,7 @@ function SalesChartSection() {
   }
 
   if (isLoading || !data) {
-    return <Skeleton className="w-full h-60" />;
+    return <Skeleton className="w-full h-[600px]" />;
   }
 
   return <SalesChart revenueData={data.data} />;
@@ -115,7 +113,7 @@ function VisitorsChartSection() {
   }
 
   if (isLoading || !data) {
-    return <Skeleton className="w-52 h-60" />;
+    return <Skeleton className="w-[30%] h-[600px]" />;
   }
 
   return (
@@ -124,28 +122,4 @@ function VisitorsChartSection() {
       percentage={data.data.percentage_change}
     />
   );
-}
-
-function TopSalesChartSection() {
-  const { data, error, isLoading } = useSWR<ReportResponse, ErrorResponse>(
-    "/api/analytics/sales",
-    fetcher
-  );
-
-  if (error) {
-    throw new Error(error.message);
-  }
-
-  if (isLoading || !data) {
-    return (
-      <div className="flex flex-col gap-4">
-        <Skeleton className="w-full h-10" />
-        <Skeleton className="w-full h-10" />
-        <Skeleton className="w-full h-10" />
-        <Skeleton className="w-full h-10" />
-      </div>
-    );
-  }
-
-  return <TopSalesTable />;
 }

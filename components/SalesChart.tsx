@@ -28,7 +28,7 @@ export default function SalesChart({
   revenueData: Array<{ month: string; value: number }>;
 }) {
   return (
-    <Card>
+    <Card className="w-full xl:max-h-[650px]">
       <CardHeader>
         <CardTitle>Revenue Overview</CardTitle>
         <CardDescription>
@@ -38,7 +38,7 @@ export default function SalesChart({
       <CardContent>
         <ChartContainer
           config={chartConfig}
-          className="h-[350px] md:h-[300px] w-full"
+          className="w-full xl:max-h-[530px]"
         >
           <AreaChart
             accessibilityLayer

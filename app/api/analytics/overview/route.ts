@@ -1,5 +1,5 @@
 import {
-  getAverageSales,
+  getAverageDailySales,
   getTotalOrders,
   getTotalProductSales,
   getTotalRevenue,
@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
 
     const revenue = await getTotalRevenue(supabase);
     const orders = await getTotalOrders(supabase);
-    const sales = await getAverageSales(supabase);
+    const sales = await getAverageDailySales(supabase);
     const products = await getTotalProductSales(supabase);
 
     return NextResponse.json({
