@@ -1,28 +1,70 @@
+<div align="center">
+
 # ZenPOS - Modern Point of Sale System
 
-ZenPOS is an open-source Point of Sale system built with Next.js and Supabase.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Next.js](https://img.shields.io/badge/Next.js-15.x-black)](https://nextjs.org/)
+[![Supabase](https://img.shields.io/badge/Supabase-2.x-3FCF8E)](https://supabase.com)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue)](https://www.typescriptlang.org/)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-## Features
+A modern, open-source Point of Sale system built with Next.js and Supabase.
 
-- User authentication and management
-- Product catalog management
-- Sales transactions processing
-- Sales analytics and reporting
-- Responsive design for desktop and mobile
+[Demo](#demo) •
+[Features](#features) •
+[Installation](#installation) •
+[Documentation](#documentation) •
+[Contributing](#contributing) •
+[License](#license)
 
-## Technologies
+</div>
 
-- [Next.js](https://nextjs.org) - React framework
-- [Supabase](https://supabase.com) - Backend as a Service
-- [Tailwind CSS](https://tailwindcss.com) - Styling
-- [shadcn/ui](https://ui.shadcn.com) - UI components
-- [Recharts](https://recharts.org) - Data visualization
+## 📋 Overview
 
-## Getting Started
+ZenPOS is a comprehensive Point of Sale solution designed for small to medium-sized businesses. It provides an intuitive interface for managing products, tracking sales, and generating reports. Built with modern web technologies, ZenPOS offers a responsive design that works seamlessly on both desktop and mobile devices.
+
+## ✨ Features
+
+- **User Management** - Secure authentication and role-based access control
+- **Product Catalog** - Easy-to-use product management with categories and inventory tracking
+- **Transaction Processing** - Smooth and intuitive sales transaction workflow
+- **Analytics Dashboard** - Comprehensive sales reports and data visualization
+- **Responsive Design** - Works on desktop, tablet, and mobile devices
+- **Offline Support** - Continue operations during internet disruptions
+
+## 🖼️ Screenshots
+
+<div align="center">
+   <img src="public/thumbnail.png" alt="ZenPOS Thumbnail" width="600px" />
+</div>
+
+## 🛠️ Tech Stack
+
+- **Frontend**
+  - [Next.js](https://nextjs.org) - React framework
+  - [TypeScript](https://www.typescriptlang.org/) - Type safety
+  - [Tailwind CSS](https://tailwindcss.com) - Styling
+  - [shadcn/ui](https://ui.shadcn.com) - UI components
+  - [Recharts](https://recharts.org) - Data visualization
+
+- **Backend**
+  - [Supabase](https://supabase.com) - Backend as a Service
+  - PostgreSQL - Database
+  - Row Level Security - Data protection
+
+## 🚀 Installation
+
+### Prerequisites
+
+- Node.js 18.0 or higher
+- npm, yarn, or pnpm
+- Supabase account
+
+### Setup
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/zenpos.git
+   git clone https://github.com/zidanhafiz/zenpos.git
    cd zenpos
    ```
 
@@ -39,12 +81,9 @@ ZenPOS is an open-source Point of Sale system built with Next.js and Supabase.
    ```bash
    cp .env.example .env.local
    ```
-   Then edit `.env.local` with your Supabase project details.
+   Edit `.env.local` with your Supabase project details.
 
 4. **Set up the database**
-   See [Database Setup](docs/DATABASE_SETUP.md) for detailed instructions.
-   
-   Quick setup:
    ```bash
    npm run setup-db
    # or
@@ -52,8 +91,9 @@ ZenPOS is an open-source Point of Sale system built with Next.js and Supabase.
    # or
    pnpm setup-db
    ```
+   See [Database Setup](docs/DATABASE_SETUP.md) for detailed instructions.
 
-5. **Run the development server**
+5. **Start the development server**
    ```bash
    npm run dev
    # or
@@ -62,37 +102,57 @@ ZenPOS is an open-source Point of Sale system built with Next.js and Supabase.
    pnpm dev
    ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the application.
+6. **Open [http://localhost:3000](http://localhost:3000)** in your browser.
 
-## License
+## 📖 Documentation
 
-This project is open source and available under the [MIT License](LICENSE).
+- [Database Setup Guide](docs/DATABASE_SETUP.md)
+- [API Documentation](docs/API.md) (coming soon)
+- [User Guide](docs/USER_GUIDE.md) (coming soon)
+- [Deployment Guide](docs/DEPLOYMENT.md) (coming soon)
 
-## Contributing
+## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome and appreciated! Here's how you can contribute:
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+1. **Fork the repository**
+2. **Create a feature branch**
+   ```bash
+   git checkout -b feature/amazing-feature
+   ```
+3. **Commit your changes**
+   ```bash
+   git commit -m 'Add some amazing feature'
+   ```
+4. **Push to the branch**
+   ```bash
+   git push origin feature/amazing-feature
+   ```
+5. **Open a Pull Request**
 
-## Support
+Please read our [Contributing Guidelines](CONTRIBUTING.md) (coming soon) for details.
 
-If you find any bugs or have a feature request, please open an issue on GitHub!
+## 📄 License
 
-## Learn More
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-To learn more about Next.js, take a look at the following resources:
+## 💬 Support
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+If you encounter any issues or have questions:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- [Open an Issue](https://github.com/zidanhafiz/zenpos/issues/new)
+- [Start a Discussion](https://github.com/zidanhafiz/zenpos/discussions)
 
-## Deploy on Vercel
+## 🔗 Links
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Supabase Documentation](https://supabase.com/docs)
+- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+<div align="center">
+
+Made with ❤️ by [Zidan Hafiz](https://github.com/zidanhafiz)
+
+</div>
