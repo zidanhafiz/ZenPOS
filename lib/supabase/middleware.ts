@@ -39,7 +39,13 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const authPaths = ["/login", "/register", "/forgot-password", "/api/auth"];
+  const authPaths = [
+    "/login",
+    "/register",
+    "/forgot-password",
+    "/api/auth",
+    "/reset-password",
+  ];
 
   const isPathStartWithAuthPaths = authPaths.some((path) =>
     request.nextUrl.pathname.startsWith(path)

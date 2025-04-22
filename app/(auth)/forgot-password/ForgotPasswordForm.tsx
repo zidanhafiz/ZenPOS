@@ -21,6 +21,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { forgotPassword } from "@/actions/auth";
+import { toast } from "@/hooks/use-toast";
 
 export function ForgotPasswordForm({
   className,
@@ -34,7 +36,24 @@ export function ForgotPasswordForm({
   });
 
   const onSubmit = async (data: ForgotPasswordSchema) => {
-    console.log(data);
+    try {
+      const res = await forgotPassword(data.email);
+
+      if (!res.success) {
+        throw Error(res.data);
+      }
+
+      toast({
+        title: "Reset link sent to email",
+        description: "Please check your email",
+      });
+    } catch (error) {
+      console.error(error);
+      form.setError("root", {
+        message:
+          (error as { message?: string })?.message || "Something went wrong",
+      });
+    }
   };
 
   return (
@@ -69,8 +88,12 @@ export function ForgotPasswordForm({
                       </FormItem>
                     )}
                   />
-                  <Button type="submit" className="w-full">
-                    Send Email
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    disabled={form.formState.isSubmitting}
+                  >
+                    {form.formState.isSubmitting ? "Sending..." : "Send Email"}
                   </Button>
                 </div>
                 <div className="text-center text-sm">

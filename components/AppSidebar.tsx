@@ -52,7 +52,7 @@ const data = {
   ],
 };
 
-const authPages = ["/login", "/register", "/forgot-password"];
+const authPages = ["/login", "/register", "/forgot-password", "/reset-password"];
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { user } = useUserStore((state) => state);

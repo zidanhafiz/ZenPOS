@@ -16,7 +16,7 @@ import useSWR from "swr";
 import { ErrorResponse } from "@/types/api-response/ErrorResponse";
 import { UserResponse } from "@/types/api-response/userTypes";
 import fetcher from "@/lib/fetcher";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export type UserStoreApi = ReturnType<typeof createUserStore>;
 
@@ -28,9 +28,17 @@ export interface UserStoreProviderProps {
   children: ReactNode;
 }
 
+const authPaths = [
+  "/login",
+  "/register",
+  "/forgot-password",
+  "/reset-password",
+];
+
 export const UserStoreProvider = ({ children }: UserStoreProviderProps) => {
   const storeRef = useRef<UserStoreApi>(null);
   const router = useRouter();
+  const pathname = usePathname();
 
   if (!storeRef.current) {
     storeRef.current = createUserStore(defaultInitState);
@@ -41,9 +49,14 @@ export const UserStoreProvider = ({ children }: UserStoreProviderProps) => {
   const { data, isLoading, error } = useSWR<UserResponse, ErrorResponse>(
     `/api/get-user`,
     fetcher,
+    {
+      revalidateOnFocus: false,
+    }
   );
 
   useEffect(() => {
+    const isAuthPath = authPaths.some((path) => pathname.startsWith(path));
+
     if (isLoading || !data) {
       state.setIsLoading(true);
     }
@@ -53,12 +66,12 @@ export const UserStoreProvider = ({ children }: UserStoreProviderProps) => {
       state.setIsLoading(false);
     }
 
-    if (error) {
+    if (error && !isAuthPath) {
       state.setError(new Error(error.message));
       state.setIsLoading(false);
       router.push("/login");
     }
-  }, [data, isLoading, error, router]);
+  }, [data, isLoading, error, router, pathname]);
 
   return (
     <UserStoreContext.Provider value={storeRef.current}>

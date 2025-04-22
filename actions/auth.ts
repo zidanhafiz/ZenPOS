@@ -286,3 +286,98 @@ export const updateUserPassword = async (
     };
   }
 };
+
+export const forgotPassword = async (
+  email: string
+): Promise<ActionResponse> => {
+  try {
+    const supabase = await createClient();
+
+    const { error } = await supabase.auth.resetPasswordForEmail(email);
+
+    if (error) {
+      throw error;
+    }
+
+    return {
+      success: true,
+      data: "Password reset email sent successfully",
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      data: (error as Error).message,
+    };
+  }
+};
+
+export const resetPassword = async (
+  formData: FormData
+): Promise<ActionResponse> => {
+  try {
+    const token = formData.get("token") as string;
+    const password = formData.get("password") as string;
+
+    const supabase = await createClient();
+
+    const { error: verifyError } = await supabase.auth.verifyOtp({
+      token_hash: token,
+      type: "recovery",
+    });
+
+    if (verifyError) {
+      throw verifyError;
+    }
+
+    const { error: updateError } = await supabase.auth.updateUser({
+      password,
+    });
+
+    if (updateError) {
+      throw updateError;
+    }
+
+    revalidatePath("/", "layout");
+    revalidatePath("/", "page");
+
+    return {
+      success: true,
+      data: "Password reset successfully",
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      data: (error as Error).message,
+    };
+  }
+};
+
+export const verifyResetToken = async (
+  token: string
+): Promise<ActionResponse> => {
+  try {
+    const supabase = await createClient();
+
+    const { error } = await supabase.auth.verifyOtp({
+      token_hash: token,
+      type: "recovery",
+    });
+
+    if (error) {
+      throw error;
+    }
+
+    return {
+      success: true,
+      data: "Token verified successfully",
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      data: (error as Error).message,
+    };
+  }
+};
