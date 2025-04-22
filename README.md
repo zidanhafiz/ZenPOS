@@ -1,24 +1,86 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ZenPOS - Modern Point of Sale System
+
+ZenPOS is an open-source Point of Sale system built with Next.js and Supabase.
+
+## Features
+
+- User authentication and management
+- Product catalog management
+- Sales transactions processing
+- Sales analytics and reporting
+- Responsive design for desktop and mobile
+
+## Technologies
+
+- [Next.js](https://nextjs.org) - React framework
+- [Supabase](https://supabase.com) - Backend as a Service
+- [Tailwind CSS](https://tailwindcss.com) - Styling
+- [shadcn/ui](https://ui.shadcn.com) - UI components
+- [Recharts](https://recharts.org) - Data visualization
 
 ## Getting Started
 
-First, run the development server:
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/yourusername/zenpos.git
+   cd zenpos
+   ```
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+2. **Install dependencies**
+   ```bash
+   npm install
+   # or
+   yarn install
+   # or
+   pnpm install
+   ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. **Set up environment variables**
+   ```bash
+   cp .env.example .env.local
+   ```
+   Then edit `.env.local` with your Supabase project details.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+4. **Set up the database**
+   See [Database Setup](docs/DATABASE_SETUP.md) for detailed instructions.
+   
+   Quick setup:
+   ```bash
+   npm run setup-db
+   # or
+   yarn setup-db
+   # or
+   pnpm setup-db
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+5. **Run the development server**
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   # or
+   pnpm dev
+   ```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the application.
+
+## License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## Support
+
+If you find any bugs or have a feature request, please open an issue on GitHub!
 
 ## Learn More
 

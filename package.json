@@ -9,7 +9,9 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "setup-db": "node scripts/setup-database.js",
+    "setup-db-deps": "node scripts/setup-db-dependencies.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
