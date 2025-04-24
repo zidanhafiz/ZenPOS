@@ -35,7 +35,15 @@ ZenPOS is a comprehensive Point of Sale solution designed for small to medium-si
 ## 🖼️ Screenshots
 
 <div align="center">
-   <img src="public/thumbnail.png" alt="ZenPOS Thumbnail" width="600px" />
+  <div>
+    <img src="public/zenpos-dashboard.png" alt="ZenPOS Dashboard" width="700px" />
+    <p><em>Dashboard - Analytics and business overview</em></p>
+  </div>
+  
+  <div style="margin-top: 20px;">
+    <img src="public/zenpos-cashier.png" alt="ZenPOS Cashier" width="700px" />
+    <p><em>Cashier - Point of sale interface</em></p>
+  </div>
 </div>
 
 ## 🛠️ Tech Stack

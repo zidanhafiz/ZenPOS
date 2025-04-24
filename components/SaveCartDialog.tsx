@@ -110,7 +110,7 @@ export default function SaveCartDialog() {
   useEffect(() => {
     form.setValue("totalPayment", cart?.total_price ?? 0);
     setMoneyBack(form.getValues("totalPayment") - (cart?.total_price ?? 0));
-  }, [cart]);
+  }, [cart, form]);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>

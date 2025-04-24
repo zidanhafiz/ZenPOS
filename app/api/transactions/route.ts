@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
     const itemsPerPage = 10;
 
     const supabase = await createClient();
-    let queryBuilder = supabase
+    const queryBuilder = supabase
       .from("transactions")
       .select("*", { count: "exact" });
 
